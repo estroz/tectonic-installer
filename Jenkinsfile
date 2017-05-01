@@ -12,7 +12,7 @@ pipeline {
   }
 
   options {
-    timeout(time:35, unit:'MINUTES')
+    timeout(time:60, unit:'MINUTES')
     buildDiscarder(logRotator(numToKeepStr:'20'))
   }
 
@@ -94,6 +94,15 @@ pipeline {
 
             export TEST_KUBECONFIG=${WORKSPACE}/build/${CLUSTER}/generated/auth/kubeconfig
             export NODE_COUNT=7 # TODO(DG): should be calculated automatically
+
+            # TODO: DO NOT MERGE, to check if race with cluster creation
+            sleep 600
+
+            curl -O https://storage.googleapis.com/kubernetes-release/release/v1.6.2/bin/linux/amd64/kubectl && chmod +x kubectl
+            export KUBECONFIG=${TEST_KUBECONFIG}
+            ./kubectl get pods --all-namespaces
+            ./kubectl get nodes
+
             installer/bin/sanity
             '''
             }

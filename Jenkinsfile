@@ -96,12 +96,18 @@ pipeline {
             export NODE_COUNT=7 # TODO(DG): should be calculated automatically
 
             # TODO: DO NOT MERGE, to check if race with cluster creation
-            sleep 600
-
             curl -O https://storage.googleapis.com/kubernetes-release/release/v1.6.2/bin/linux/amd64/kubectl && chmod +x kubectl
             export KUBECONFIG=${TEST_KUBECONFIG}
-            ./kubectl get pods --all-namespaces
-            ./kubectl get nodes
+
+            wait=600
+            end=$(($(date +%s) + ${wait}))
+
+            while [ $(date +%s) -lt ${end} ]; do
+                date -u
+                ./kubectl get pods --all-namespaces || echo "error"
+                ./kubectl describe nodes || echo "error"
+                sleep 10
+            done
 
             installer/bin/sanity
             '''

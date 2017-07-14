@@ -145,7 +145,7 @@ variable "tectonic_aws_extra_tags" {
 
 variable "tectonic_autoscaling_group_extra_tags" {
   type    = "list"
-  default = []
+  default = [{}]
 
   description = <<EOF
 (optional) Extra AWS tags to be applied to created autoscaling group resources.

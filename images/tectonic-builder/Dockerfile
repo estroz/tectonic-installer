@@ -20,7 +20,7 @@ RUN go get github.com/jstemmer/go-junit-report
 RUN go get github.com/coreos/license-bill-of-materials
 
 ### 'grafiti' for cluster cleanup
-ENV GRAFITI_VERSION "v0.1.1"
+ENV GRAFITI_VERSION "v0.1.2"
 RUN git clone -q https://github.com/coreos/grafiti.git ${GOPATH}/src/github.com/coreos/grafiti \
     && cd ${GOPATH}/src/github.com/coreos/grafiti \
     && git checkout -q tags/${GRAFITI_VERSION} \

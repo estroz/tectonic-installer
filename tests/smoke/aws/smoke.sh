@@ -173,14 +173,10 @@ grafiti_clean() {
 
     GRAFITI_TMP_DIR="$(mktemp -d -p $WORKSPACE)"
 
-    GRAFITI_CONFIG_FILE="${GRAFITI_TMP_DIR}/config.toml"
-    echo "maxNumRequestRetries = 11" > "$GRAFITI_CONFIG_FILE"
-
     GRAFITI_TAG_FILE="${GRAFITI_TMP_DIR}/tag.json"
-    echo -e "{\"TagFilters\":[{\"Key\":\"tectonicClusterID\",\"Values\":[\"$CLUSTER_ID\"]}]}"  > "$GRAFITI_TAG_FILE"
+    printf '{"TagFilters":[{"Key":"tectonicClusterID","Values":["%s"]}]}' "$CLUSTER_ID" > "$GRAFITI_TAG_FILE"
 
     echo "Cleaning up \"${CLUSTER_ID}\"..."
-
     grafiti --config "$GRAFITI_CONFIG_FILE" --ignore-errors delete --silent --all-deps --delete-file "$GRAFITI_TAG_FILE"
 
     rm -rf "$GRAFITI_TMP_DIR"
